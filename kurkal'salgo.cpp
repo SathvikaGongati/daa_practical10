@@ -3,28 +3,29 @@
 using namespace std;
 
 int main() {
-    int n = 4, e = 5;
+    int e = 5, n = 4;
 
-    int edges[5][3] = {
-        {0, 1, 10},
-        {0, 2, 6},
-        {0, 3, 5},
-        {1, 3, 15},
-        {2, 3, 4}
-    };
+    int a[5] = {0, 0, 0, 1, 2};
+    int b[5] = {1, 2, 3, 3, 3};
+    int w[5] = {10, 6, 5, 15, 4};
 
     // Sort edges by weight
-    sort(edges, edges + e, [](int a[], int b[]) {
-        return a[2] < b[2];
-    });
+    for (int i = 0; i < e - 1; i++) {
+        for (int j = i + 1; j < e; j++) {
+            if (w[i] > w[j]) {
+                swap(w[i], w[j]);
+                swap(a[i], a[j]);
+                swap(b[i], b[j]);
+            }
+        }
+    }
 
     int parent[4] = {0, 1, 2, 3};
     int cost = 0, count = 0;
 
     for (int i = 0; i < e; i++) {
-        int u = edges[i][0];
-        int v = edges[i][1];
-        int w = edges[i][2];
+        int u = a[i];
+        int v = b[i];
 
         while (parent[u] != u)
             u = parent[u];
@@ -33,11 +34,10 @@ int main() {
             v = parent[v];
 
         if (u != v) {
-            cout << edges[i][0] << " - "
-                 << edges[i][1] << " : "
-                 << w << endl;
+            cout << a[i] << " - " << b[i]
+                 << " : " << w[i] << endl;
 
-            cost += w;
+            cost += w[i];
             parent[u] = v;
             count++;
 
